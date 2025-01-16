@@ -1,0 +1,94 @@
+openapi: 3.1.0
+info:
+  title: API de Imóveis
+  description: API para extrair o código de imóveis de uma URL e buscar informações da imobiliária no XML.
+  version: 1.0.0
+servers:
+  - url: https://sua-api.onrender.com
+    description: Servidor da API no Render
+paths:
+  /extract-code:
+    post:
+      operationId: extractCode
+      summary: Extrai o código de imóvel de uma URL.
+      description: Recebe uma URL e retorna o código de imóvel encontrado.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: URL do imóvel.
+                  example: "https://site.com/anuncio?codigo=ABC123-45"
+      responses:
+        '200':
+          description: Código extraído com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: Código do imóvel extraído.
+                    example: "ABC123-45"
+        '400':
+          description: Erro ao processar a URL.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Mensagem de erro.
+
+  /fetch-real-estate-data:
+    post:
+      operationId: fetchRealEstateData
+      summary: Busca informações da imobiliária com base no código do imóvel.
+      description: Recebe um código de imóvel e retorna informações sobre a imobiliária responsável.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  description: Código do imóvel.
+                  example: "ABC123-45"
+      responses:
+        '200':
+          description: Informações da imobiliária retornadas com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Nome da imobiliária.
+                    example: "Imobiliária Exemplo"
+                  phone:
+                    type: string
+                    description: Telefone da imobiliária.
+                    example: "+55 11 1234-5678"
+                  email:
+                    type: string
+                    description: Email da imobiliária.
+                    example: "contato@imobiliariaexemplo.com.br"
+        '404':
+          description: Código do imóvel não encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Mensagem de erro.

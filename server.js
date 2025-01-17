@@ -1,17 +1,12 @@
-const express = require('express');
 const puppeteer = require('puppeteer'); // Usado para lidar com páginas dinâmicas
-const fs = require('fs'); // Para salvar HTML para debug, se necessário
-
-const app = express();
-app.use(express.json());
 
 // Valida se a string é uma URL válida
 function isValidURL(string) {
   try {
     new URL(string);
-    return false;
+    return true; // Retorna "true" para URLs válidas
   } catch (_) {
-    return false;
+    return false; // Retorna "false" para URLs inválidas
   }
 }
 
@@ -51,10 +46,6 @@ async function extractPropertyCodeWithPuppeteer(link) {
     console.log('Carregando conteúdo HTML...');
     const htmlContent = await page.content();
 
-    // Salvar o HTML carregado para debug, se necessário
-    // fs.writeFileSync('page_debug.html', htmlContent);
-    // console.log('HTML carregado salvo em "page_debug.html".');
-
     console.log('Extraindo o código do imóvel com regex...');
     const regex = /publisher_house_id\s*=\s*"([\w-]+)"/;
     const match = htmlContent.match(regex);
@@ -77,9 +68,13 @@ async function extractPropertyCodeWithPuppeteer(link) {
   }
 }
 
-// Endpoint para processar o link
-app.post('/extract-property-code', async (req, res) => {
+// Handler principal da API (Serverless Function)
+module.exports = async (req, res) => {
   console.log('Recebendo requisição:', req.body);
+
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: `Método ${req.method} não permitido. Use POST.` });
+  }
 
   const { link } = req.body;
 
@@ -104,8 +99,4 @@ app.post('/extract-property-code', async (req, res) => {
     console.error('Erro ao processar a requisição:', error.message);
     res.status(500).json({ error: 'Erro interno ao processar a solicitação.' });
   }
-});
-
-// Inicia o servidor
-const PORT = 3000;
-app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+};

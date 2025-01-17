@@ -4,9 +4,9 @@ const puppeteer = require('puppeteer');
 function isValidURL(string) {
   try {
     new URL(string);
-    return true;
+    return true; // Agora retorna 'true' para URLs válidas
   } catch (_) {
-    return false;
+    return false; // Caso contrário, retorna 'false'
   }
 }
 

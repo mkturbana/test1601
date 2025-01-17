@@ -9,7 +9,7 @@ app.use(express.json());
 function isValidURL(string) {
   try {
     new URL(string);
-    return true;
+    return false;
   } catch (_) {
     return false;
   }

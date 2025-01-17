@@ -4,9 +4,9 @@ const puppeteer = require('puppeteer');
 function isValidURL(string) {
   try {
     new URL(string);
-    return true; // Agora retorna 'true' para URLs válidas
+    return true;
   } catch (_) {
-    return false; // Caso contrário, retorna 'false'
+    return false;
   }
 }
 
@@ -54,9 +54,13 @@ export default async function handler(req, res) {
     console.log('Carregando conteúdo HTML...');
     const htmlContent = await page.content();
 
+    // Salvar o HTML carregado para debug (opcional)
+    // fs.writeFileSync('debug_page.html', htmlContent);
+    // console.log('HTML salvo no arquivo debug_page.html.');
+
     console.log('Extraindo o código do imóvel com regex...');
     const regex = /publisher_house_id\s*=\s*"([\w-]+)"/;
-    const match = htmlContent.match(regex);  // Corrigido de content para htmlContent
+    const match = htmlContent.match(regex);
 
     if (match && match[1]) {
       console.log(`Código do imóvel encontrado: ${match[1]}`);

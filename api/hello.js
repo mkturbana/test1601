@@ -54,10 +54,6 @@ export default async function handler(req, res) {
     console.log('Carregando conteúdo HTML...');
     const htmlContent = await page.content();
 
-    // Salvar o HTML carregado para debug (opcional)
-    // fs.writeFileSync('debug_page.html', htmlContent);
-    // console.log('HTML salvo no arquivo debug_page.html.');
-
     console.log('Extraindo o código do imóvel com regex...');
     const regex = /publisher_house_id\s*=\s*"([\w-]+)"/;
     const match = htmlContent.match(regex);

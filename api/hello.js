@@ -56,8 +56,7 @@ export default async function handler(req, res) {
 
     console.log('Extraindo o código do imóvel com regex...');
     const regex = /publisher_house_id\s*=\s*"([\w-]+)"/;
-    const match = content.match(regex);
-
+    const match = htmlContent.match(regex);  // Corrigido de content para htmlContent
 
     if (match && match[1]) {
       console.log(`Código do imóvel encontrado: ${match[1]}`);

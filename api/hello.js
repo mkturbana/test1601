@@ -48,14 +48,12 @@ export default async function handler(req, res) {
     console.log('Navegando até o link...');
     await page.goto(link, { waitUntil: 'networkidle2', timeout: 60000 });
 
-    // Esperar pelo seletor que indica que o código foi carregado
-    console.log('Esperando o seletor do código ser carregado...');
-    await page.waitForSelector('script', { timeout: 60000 });
+    console.log('Esperando o seletor <body> estar disponível...');
+    await page.waitForSelector('body', { timeout: 60000 });
 
     console.log('Carregando conteúdo HTML...');
     const htmlContent = await page.content();
 
-    // Usar uma regex mais robusta para capturar o publisher_house_id
     console.log('Extraindo o código do imóvel com regex...');
     const regex = /publisher_house_id\s*=\s*"([\w-]+)"/;
     const match = htmlContent.match(regex);
